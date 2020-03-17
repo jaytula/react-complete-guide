@@ -18,7 +18,7 @@ class App extends Component {
     return (
       <div className='App'>
         <h1>Hello World!</h1>
-        <UserInput changeNameHandler={this.changeNameHandler} />
+        <UserInput changeNameHandler={this.changeNameHandler} name={this.state.name} />
 
         <UserOutput name={this.state.name} />
         <UserOutput name="Python" />
