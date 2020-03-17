@@ -7,6 +7,12 @@ class App extends Component {
     name: 'JavaScript'
   }
 
+  changeNameHandler = () => {
+    this.setState({
+      name: 'Dart'
+    })
+  }
+
   render() {
     return (
       <div className='App'>
