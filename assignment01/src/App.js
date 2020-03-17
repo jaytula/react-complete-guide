@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import './App.css';
 import UserOutput from './UserOutput';
+import UserInput from './UserInput';
 
 class App extends Component {
   state = {
     name: 'JavaScript'
   }
 
-  changeNameHandler = () => {
+  changeNameHandler = (event) => {
     this.setState({
-      name: 'Dart'
+      name: event.target.value
     })
   }
 
@@ -17,6 +18,8 @@ class App extends Component {
     return (
       <div className='App'>
         <h1>Hello World!</h1>
+        <UserInput changeNameHandler={this.changeNameHandler} />
+
         <UserOutput name={this.state.name} />
         <UserOutput name="Python" />
         <UserOutput name="Go" />

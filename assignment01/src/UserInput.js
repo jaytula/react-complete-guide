@@ -4,7 +4,7 @@ class UserInput extends React.Component {
   render() {
     return (
       <div>
-        <input type='text' />
+        <input type='text' onChange={this.props.changeNameHandler} />
       </div>
     );
   }
