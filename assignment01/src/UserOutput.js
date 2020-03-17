@@ -2,9 +2,11 @@ import React from 'react';
 
 class UserOutput extends React.Component {
   render() {
+    const { name } = this.props;
+
     return (
       <div>
-        <p>This is paragraph 1.</p>
+        <p>My name is {name}.</p>
         <p>This is paragraph 2.</p>
       </div>
     );

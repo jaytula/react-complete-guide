@@ -7,9 +7,9 @@ class App extends Component {
     return (
       <div className='App'>
         <h1>Hello World!</h1>
-        <UserOutput />
-        <UserOutput />
-        <UserOutput />
+        <UserOutput name="Ruby" />
+        <UserOutput name="Python" />
+        <UserOutput name="Go" />
       </div>
     );
   }
