@@ -3,11 +3,15 @@ import './App.css';
 import UserOutput from './UserOutput';
 
 class App extends Component {
+  state = {
+    name: 'JavaScript'
+  }
+
   render() {
     return (
       <div className='App'>
         <h1>Hello World!</h1>
-        <UserOutput name="Ruby" />
+        <UserOutput name={this.state.name} />
         <UserOutput name="Python" />
         <UserOutput name="Go" />
       </div>
