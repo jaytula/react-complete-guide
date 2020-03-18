@@ -9,7 +9,7 @@ const style = {
 };
 
 const CharComponent = props => {
-  return <div style={style}>{props.char}</div>;
+  return <div style={style} onClick={props.click}>{props.char}</div>;
 };
 
 export default CharComponent;
