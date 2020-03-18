@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import ValidationComponent from './ValidationComponent';
+import CharComponent from './CharComponent';
 
 class App extends Component {
   state = {
@@ -53,6 +54,11 @@ class App extends Component {
           Text '{this.state.textValue}' has length {this.state.textValue.length}
         </p>
         <ValidationComponent textLength={this.state.textValue.length} />
+        <div>
+          {this.state.textValue.split('').map((char, index) => (
+            <CharComponent key={index} char={char} />
+          ))}
+        </div>
       </div>
     );
   }

@@ -8,8 +8,8 @@ const style = {
   border: '1px solid black'
 };
 
-const CharComponent = char => {
-  return <div style={style}>{char}</div>;
+const CharComponent = props => {
+  return <div style={style}>{props.char}</div>;
 };
 
 export default CharComponent;
