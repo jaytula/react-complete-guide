@@ -11,17 +11,17 @@ class App extends Component {
       { id: 3, name: 'Stephanie', age: 25 }
     ],
     otherState: 'some other value',
-    showPersons: false
+    showPersons: true
   };
 
-  nameChangeHandler = event => {
-    this.setState({
-      persons: [
-        { name: 'Max', age: 28 },
-        { name: event.target.value, age: 29 },
-        { name: 'Stephanie', age: 26 }
-      ]
-    });
+  nameChangeHandler = (event, id) => {
+    const personIndex = this.state.persons.findIndex(p => p.id === id);
+    const person = { ...this.state.persons[personIndex] };
+    person.name = event.target.value;
+
+    const persons = this.state.persons.slice();
+    persons[personIndex] = person;
+    this.setState({ persons: persons });
   };
 
   deletePersonHandler = index => {
@@ -40,7 +40,7 @@ class App extends Component {
     const style = {
       backgroundColor: 'white',
       font: 'inherit',
-      border: '1px solid blue',
+      border: '1px solid red',
       padding: '8px',
       cursor: 'pointer'
     };
@@ -55,6 +55,7 @@ class App extends Component {
               name={person.name}
               age={person.age}
               click={this.deletePersonHandler.bind(this, index)}
+              changed={event => this.nameChangeHandler(event, person.id)}
             ></Person>
           ))}
         </div>
