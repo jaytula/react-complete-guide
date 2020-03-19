@@ -38,9 +38,10 @@ class App extends Component {
 
   render() {
     const style = {
-      backgroundColor: 'white',
+      color: 'white',
       font: 'inherit',
       border: '1px solid red',
+      backgroundColor: this.state.showPersons ? 'red' : 'green',
       padding: '8px',
       cursor: 'pointer'
     };
