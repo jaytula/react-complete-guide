@@ -25,8 +25,8 @@ const Cockpit = props => {
   if (props.showPersons) {
     btnClass = classes.Red;
   }
-  if (props.persons.length <= 2) assignedClasses.push(classes.red);
-  if (props.persons.length <= 1) assignedClasses.push(classes.bold);
+  if (props.personsLength <= 2) assignedClasses.push(classes.red);
+  if (props.personsLength <= 1) assignedClasses.push(classes.bold);
 
   console.log('[Cockpit.js] pre-return');
 
@@ -42,4 +42,4 @@ const Cockpit = props => {
   );
 };
 
-export default Cockpit;
+export default React.memo(Cockpit);
