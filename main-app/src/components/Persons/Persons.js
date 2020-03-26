@@ -41,21 +41,15 @@ class Persons extends React.PureComponent {
   render() {
     console.log('[Persons.js] rendering...');
 
-    const props = this.props;
-
-    return (
-      <div>
-        {props.persons.map((person, index) => (
-          <Person
-            key={person.id}
-            name={person.name}
-            age={person.age}
-            click={props.clicked.bind(this, index)}
-            changed={event => props.changed(event, person.id)}
-          ></Person>
-        ))}
-      </div>
-    );
+    return this.props.persons.map((person, index) => (
+      <Person
+        key={person.id}
+        name={person.name}
+        age={person.age}
+        click={this.props.clicked.bind(this, index)}
+        changed={event => this.props.changed(event, person.id)}
+      ></Person>
+    ));
   }
 }
 
