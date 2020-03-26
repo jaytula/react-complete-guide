@@ -3,6 +3,7 @@ import classes from './App.module.css';
 
 import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
+import WithClass from '../hoc/WithClass';
 
 class App extends Component {
   constructor(props) {
@@ -82,16 +83,16 @@ class App extends Component {
     }
 
     return (
-      <div className={classes.App}>
-        <button onClick={this.removeCockpitHandler}>Remove Cockpit</button>
-        {this.state.showCockpit && <Cockpit
-          title={this.props.appTitle}
-          personsLength={this.state.persons.length}
-          showPersons={this.state.showPersons}
-          clicked={this.togglePersonsHandler}
-        />}
-        {persons}
-      </div>
+        <WithClass classes={classes.App}>
+          <button onClick={this.removeCockpitHandler}>Remove Cockpit</button>
+          {this.state.showCockpit && <Cockpit
+            title={this.props.appTitle}
+            personsLength={this.state.persons.length}
+            showPersons={this.state.showPersons}
+            clicked={this.togglePersonsHandler}
+          />}
+          {persons}
+        </WithClass>
     );
   }
 }
