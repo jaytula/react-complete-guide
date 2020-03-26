@@ -35,7 +35,7 @@ class Persons extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    console.log('Persons.js] componentWillUnmount');
+    console.log('[Persons.js] componentWillUnmount');
   }
 
   render() {
