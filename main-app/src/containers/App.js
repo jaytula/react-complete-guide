@@ -3,7 +3,8 @@ import classes from './App.module.css';
 
 import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
-import WithClass from '../hoc/WithClass';
+import withClass from '../hoc/withClass';
+import Aux from '../hoc/Aux';
 
 class App extends Component {
   constructor(props) {
@@ -66,8 +67,8 @@ class App extends Component {
   };
 
   removeCockpitHandler = () => {
-    this.setState({showCockpit: false});
-  }
+    this.setState({ showCockpit: false });
+  };
 
   render() {
     console.log('[App.js] render');
@@ -83,18 +84,20 @@ class App extends Component {
     }
 
     return (
-        <WithClass classes={classes.App}>
-          <button onClick={this.removeCockpitHandler}>Remove Cockpit</button>
-          {this.state.showCockpit && <Cockpit
+      <Aux>
+        <button onClick={this.removeCockpitHandler}>Remove Cockpit</button>
+        {this.state.showCockpit && (
+          <Cockpit
             title={this.props.appTitle}
             personsLength={this.state.persons.length}
             showPersons={this.state.showPersons}
             clicked={this.togglePersonsHandler}
-          />}
-          {persons}
-        </WithClass>
+          />
+        )}
+        {persons}
+      </Aux>
     );
   }
 }
 
-export default App;
+export default withClass(App, classes.App);
