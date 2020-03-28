@@ -48,6 +48,7 @@ class Persons extends React.PureComponent {
         age={person.age}
         click={this.props.clicked.bind(this, index)}
         changed={event => this.props.changed(event, person.id)}
+        isAuth={this.props.isAuthenticated}
       ></Person>
     ));
   }

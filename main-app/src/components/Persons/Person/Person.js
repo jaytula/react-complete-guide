@@ -19,6 +19,7 @@ class Person extends React.Component {
     const props = this.props;
     return (
       <Aux>
+        {this.props.isAuth ? <p>Authenticated!</p> : <p>Please Login!</p>}
         <p key='i1' onClick={() => props.click()}>
           I'm a {props.name} and I am {props.age} years old!
         </p>
@@ -41,6 +42,6 @@ Person.propTypes = {
   age: PropTypes.number,
   changed: PropTypes.func,
   click: PropTypes.func
-}
+};
 
 export default withClass(Person, classes.Person);
