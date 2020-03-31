@@ -11,6 +11,13 @@ class BurgerBuilder extends Component {
       meat: 0
     }
   }
+
+  addIngredient = (name, quantity) => {
+    const updatedIngredents = {...this.state.ingredients};
+    updatedIngredents[name] += quantity;
+    this.setState({ingredients: updatedIngredents});
+  }
+  
   render() {
     return (
       <Aux>
