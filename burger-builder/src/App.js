@@ -2,14 +2,25 @@ import React from 'react';
 import Layout from './hoc/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
 
-function App() {
-  return (
-    <div>
-      <Layout>
+class App extends React.Component {
+  // state = {
+  //   show: true,
+  // };
+
+  // componentDidMount() {
+  //   setTimeout(() => {
+  //     this.setState({ show: false });
+  //   }, 5000);
+  // }
+
+  render() {
+    return (
+      <div>
+        {/* <Layout>{this.state.show ? <BurgerBuilder /> : null} </Layout> */}
         <BurgerBuilder />
-      </Layout>
-    </div>
-  );
+      </div>
+    );
+  }
 }
 
 export default App;
