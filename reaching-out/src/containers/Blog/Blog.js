@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Link, withRouter } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 
 import './Blog.css';
 import Posts from '../Posts/Posts';
@@ -7,8 +7,6 @@ import NewPost from '../NewPost/NewPost';
 
 class Blog extends Component {
   render() {
-    console.log({abc: this.props});
-    
     return (
       <div className='Blog'>
         <header>
@@ -20,7 +18,7 @@ class Blog extends Component {
               <li>
                 <Link
                   to={{
-                    pathname: this.props.match.url + 'new-post',
+                    pathname: '/new-post',
                     hash: '#submit',
                     search: '?quick-submit=true'
                   }}
@@ -40,4 +38,4 @@ class Blog extends Component {
   }
 }
 
-export default withRouter(Blog);
+export default Blog;
