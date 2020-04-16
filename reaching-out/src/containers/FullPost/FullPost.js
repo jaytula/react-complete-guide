@@ -4,38 +4,39 @@ import './FullPost.css';
 
 class FullPost extends Component {
   state = {
-    loadedPost: null,
+    loadedPost: null
   };
 
   // shouldComponentUpdate(nextProps, nextState) {
   //   return this.props.id !== nextProps.id;
   // }
 
-  componentDidUpdate() {
-    if (!this.props.id) return;
-    if (
-      !this.state.loadedPost ||
-      (this.state.loadedPost && this.state.loadedPost.id !== this.props.id)
-    ) {
-      axios
-        .get(`/posts/${this.props.id}`)
-        .then((res) => {
-          this.setState({ loadedPost: res.data });
-        });
-    }
+  componentDidMount() {
+    // if (!this.props.id) return;
+    // if (
+    //   !this.state.loadedPost ||
+    //   (this.state.loadedPost && this.state.loadedPost.id !== this.props.id)
+    // ) {
+    //   axios
+    //     .get(`/posts/${this.props.id}`)
+    //     .then((res) => {
+    //       this.setState({ loadedPost: res.data });
+    //     });
+    // }
+    axios.get(`/posts/${this.props.match.params.id}`).then(res => {
+      this.setState({ loadedPost: res.data });
+    });
   }
 
   deleteHandler = () => {
-    axios
-      .delete(`/posts/${this.props.id}`)
-      .then((res) => {
-        console.log(res);
-      });
+    axios.delete(`/posts/${this.props.id}`).then(res => {
+      console.log(res);
+    });
   };
 
   render() {
-    if (!this.props.id)
-      return <p style={{ textAlign: 'center' }}>Please select a Post!</p>;
+    // if (!this.props.id)
+    //   return <p style={{ textAlign: 'center' }}>Please select a Post!</p>;
 
     let post = <p style={{ textAlign: 'center' }}>Loading...</p>;
 
