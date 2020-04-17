@@ -28,6 +28,21 @@ class FullPost extends Component {
     });
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return (
+      this.props.match.params.id !== nextProps.match.params.id ||
+      this.state.loadedPost !== nextState.loadedPost
+    );
+  }
+
+  componentDidUpdate() {
+    if (this.state.loadedPost.id != this.props.match.params.id) {
+      axios.get(`/posts/${this.props.match.params.id}`).then(res => {
+        this.setState({ loadedPost: res.data });
+      });
+    }
+  }
+
   deleteHandler = () => {
     axios.delete(`/posts/${this.props.id}`).then(res => {
       console.log(res);
