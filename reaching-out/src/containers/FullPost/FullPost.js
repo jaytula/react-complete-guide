@@ -12,31 +12,19 @@ class FullPost extends Component {
   // }
 
   componentDidMount() {
-    // if (!this.props.id) return;
-    // if (
-    //   !this.state.loadedPost ||
-    //   (this.state.loadedPost && this.state.loadedPost.id !== this.props.id)
-    // ) {
-    //   axios
-    //     .get(`/posts/${this.props.id}`)
-    //     .then((res) => {
-    //       this.setState({ loadedPost: res.data });
-    //     });
-    // }
-    axios.get(`/posts/${this.props.match.params.id}`).then(res => {
-      this.setState({ loadedPost: res.data });
-    });
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return (
-      this.props.match.params.id !== nextProps.match.params.id ||
-      this.state.loadedPost !== nextState.loadedPost
-    );
+    this.loadData();
   }
 
   componentDidUpdate() {
-    if (this.state.loadedPost.id != this.props.match.params.id) {
+    this.loadData();
+  }
+
+  loadData() {
+    if (
+      !this.state.loadedPost ||
+      this.state.loadedPost.id !== +this.props.match.params.id
+    ) {
+      console.log('loadData()');
       axios.get(`/posts/${this.props.match.params.id}`).then(res => {
         this.setState({ loadedPost: res.data });
       });
@@ -44,7 +32,7 @@ class FullPost extends Component {
   }
 
   deleteHandler = () => {
-    axios.delete(`/posts/${this.props.id}`).then(res => {
+    axios.delete(`/posts/${this.props.match.params.id}`).then(res => {
       console.log(res);
     });
   };
