@@ -3,6 +3,7 @@ import Burger from '../../Burger/Burger';
 import Button from '../../UI/Button/Button';
 
 import classes from './CheckoutSummary.module.css';
+import { withRouter } from 'react-router-dom';
 
 const CheckoutSummary = props => {
   return (
@@ -17,4 +18,5 @@ const CheckoutSummary = props => {
   );
 };
 
-export default CheckoutSummary;
+
+export default withRouter(CheckoutSummary);
