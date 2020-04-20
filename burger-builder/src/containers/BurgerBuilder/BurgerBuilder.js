@@ -29,18 +29,18 @@ class BurgerBuilder extends Component {
   componentDidMount() {
     axios
       .get('/ingredients.json')
-      .then((response) => {
+      .then(response => {
         console.log(response);
         this.setState({ ingredients: response.data });
       })
-      .catch((error) => {
+      .catch(error => {
         this.setState({ error: true });
       });
   }
 
   updatePurchaseState(ingredients) {
     const sum = Object.keys(ingredients)
-      .map((igKey) => {
+      .map(igKey => {
         return ingredients[igKey];
       })
       .reduce((sum, el) => sum + el, 0);
@@ -48,7 +48,7 @@ class BurgerBuilder extends Component {
     this.setState({ purchasable: sum > 0 });
   }
 
-  addIngredientHandler = (type) => {
+  addIngredientHandler = type => {
     const oldCount = this.state.ingredients[type];
     const updatedCount = oldCount + 1;
     const updatedIngredients = { ...this.state.ingredients };
@@ -63,7 +63,7 @@ class BurgerBuilder extends Component {
     this.updatePurchaseState(updatedIngredients);
   };
 
-  removeIngredientHandler = (type) => {
+  removeIngredientHandler = type => {
     const oldCount = this.state.ingredients[type];
     if (oldCount <= 0) return;
     const updatedCount = oldCount - 1;
@@ -115,7 +115,15 @@ class BurgerBuilder extends Component {
     //     console.log(error);
     //     this.setState({ loading: false, purchasing: false });
     //   });
-    this.props.history.push('/checkout');
+
+    const search = new URLSearchParams();
+    Object.entries(this.state.ingredients).forEach(([key, value]) => {
+      search.append(key, value);
+    });
+    this.props.history.push({
+      pathname: '/checkout',
+      search: search.toString(),
+    });
   };
 
   render() {
