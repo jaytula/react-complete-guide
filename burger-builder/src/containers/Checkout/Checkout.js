@@ -5,18 +5,20 @@ import ContactData from './ContactData/ContactData';
 
 class Checkout extends React.Component {
   state = {
-    ingredients: {}
-  }
+    ingredients: {},
+    totalPrice: 0,
+  };
 
   componentDidMount() {
     const search = new URLSearchParams(this.props.location.search);
 
     const ingredients = {};
-    for(let [key, value] of search.entries()) {
-      ingredients[key] = +value;
+    const ingredientKeys = ['cheese', 'meat', 'bacon', 'salad'];
+    for (let key of ingredientKeys) {
+      ingredients[key] = +search.get(key);
     }
 
-    this.setState({ingredients});
+    this.setState({ ingredients, totalPrice: search.get('price') });
   }
 
   checkoutCancelledHandler = () => {
@@ -35,8 +37,18 @@ class Checkout extends React.Component {
           onCheckoutCancelled={this.checkoutCancelledHandler}
           onCheckoutContinued={this.checkoutContinuedHandler}
         />
-        <Route path={this.props.match.path + '/contact-data'} component={ContactData} />
-=      </div>
+        <Route
+          path={this.props.match.path + '/contact-data'}
+          render={(props) => (
+            <ContactData
+              ingredients={this.state.ingredients}
+              totalPrice={this.state.totalPrice}
+              {...props}
+            />
+          )}
+        />
+        ={' '}
+      </div>
     );
   }
 }
