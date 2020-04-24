@@ -1,69 +1,69 @@
-import React, { Component } from 'react';
-import Button from '../../../components/UI/Button/Button';
-import classes from './ContactData.module.css';
+import React, { Component } from "react";
+import Button from "../../../components/UI/Button/Button";
+import classes from "./ContactData.module.css";
 
-import axios from '../../../axios-orders';
-import Spinner from '../../../components/UI/Spinner/Spinner';
-import Input from '../../../components/UI/Input/Input';
+import axios from "../../../axios-orders";
+import Spinner from "../../../components/UI/Spinner/Spinner";
+import Input from "../../../components/UI/Input/Input";
 
 class ContactData extends Component {
   state = {
     orderForm: {
       name: {
-        elementType: 'input',
+        elementType: "input",
         elementConfig: {
-          type: 'text',
-          placeholder: 'Your Name',
+          type: "text",
+          placeholder: "Your Name",
         },
-        value: '',
+        value: "",
       },
       street: {
-        elementType: 'input',
+        elementType: "input",
         elementConfig: {
-          type: 'text',
-          placeholder: 'Street',
+          type: "text",
+          placeholder: "Street",
         },
-        value: '',
+        value: "",
       },
       zipCode: {
-        elementType: 'input',
+        elementType: "input",
         elementConfig: {
-          type: 'text',
-          placeholder: 'Postal Code',
+          type: "text",
+          placeholder: "Postal Code",
         },
-        value: '',
+        value: "",
       },
       country: {
-        elementType: 'input',
+        elementType: "input",
         elementConfig: {
-          type: 'text',
-          placeholder: 'Country',
+          type: "text",
+          placeholder: "Country",
         },
-        value: '',
+        value: "",
       },
       email: {
-        elementType: 'input',
+        elementType: "input",
         elementConfig: {
-          type: 'email',
-          placeholder: 'Your Mail',
+          type: "email",
+          placeholder: "Your Mail",
         },
-        value: '',
+        value: "",
       },
       deliveryMethod: {
-        elementType: 'select',
+        elementType: "select",
         elementConfig: {
           options: [
-            { value: 'fastest', displayValue: 'Fastest' },
-            { value: 'cheapest', displayValue: 'Cheapest' },
+            { value: "fastest", displayValue: "Fastest" },
+            { value: "cheapest", displayValue: "Cheapest" },
           ],
         },
-        value: '',
+        value: "",
       },
     },
     loading: false,
   };
 
-  orderHandler = event => {
+  orderHandler = (event) => {
     event.preventDefault();
     this.setState({ loading: true });
 
@@ -73,43 +73,33 @@ class ContactData extends Component {
     };
 
     axios
-      .post('/orders.json', order)
-      .then(res => {
+      .post("/orders.json", order)
+      .then((res) => {
         this.setState({ loading: false });
-        this.props.history.push('/');
+        this.props.history.push("/");
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({ loading: false });
       });
   };
 
   render() {
+    const formInputs = [];
+    for (let [name, formInput] of Object.entries(this.state.orderForm)) {
+      formInputs.push(
+        <Input
+          key={name}
+          elementType={formInput.elementType}
+          elementConfig={formInput.elementConfig}
+          value={formInput.value}
+        />
+      );
+    }
+
     let form = (
       <form>
-        <Input
-          elementType="..."
-          elementConfig="..."
-          value="..."
-        />
-        <Input
-          inputtype='input'
-          type='email'
-          name='email'
-          placeholder='Your Mail'
-        />
-        <Input
-          inputtype='input'
-          type='text'
-          name='street'
-          placeholder='Street'
-        />
-        <Input
-          inputtype='input'
-          type='text'
-          name='postal'
-          placeholder='Postal Code'
-        />
-        <Button btnType='Success' clicked={this.orderHandler}>
+        {formInputs}
+        <Button btnType="Success" clicked={this.orderHandler}>
           ORDER
         </Button>
       </form>
