@@ -84,6 +84,8 @@ class ContactData extends Component {
             { value: 'cheapest', displayValue: 'Cheapest' },
           ],
         },
+        validation: {},
+        valid: true,
         value: '',
       },
     },
@@ -147,7 +149,7 @@ class ContactData extends Component {
 
     const formIsValid = Object.values(updatedOrderForm).reduce(
       (acc, curr) => {
-        return acc && (!curr.validation || curr.valid);
+        return acc && curr.valid;
       },
       true
     );
