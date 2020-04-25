@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Button from '../../../components/UI/Button/Button';
 import classes from './ContactData.module.css';
 
-// import axios from "../../../axios-orders";
+import axios from '../../../axios-orders';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 
@@ -66,23 +66,27 @@ class ContactData extends Component {
   orderHandler = event => {
     event.preventDefault();
     this.setState({ loading: true });
-
+    const formData = {};
+    for (let formElementIdentifier in this.state.orderForm) {
+      formData[formElementIdentifier] = this.state.orderForm[
+        formElementIdentifier
+      ].value;
+    }
     const order = {
       ingredients: this.props.ingredients,
       price: this.props.totalPrice,
+      orderData: formData,
     };
 
-    console.log(order);
-
-    // axios
-    //   .post("/orders.json", order)
-    //   .then((res) => {
-    //     this.setState({ loading: false });
-    //     this.props.history.push("/");
-    //   })
-    //   .catch((error) => {
-    //     this.setState({ loading: false });
-    //   });
+    axios
+      .post('/orders.json', order)
+      .then(res => {
+        this.setState({ loading: false });
+        this.props.history.push('/');
+      })
+      .catch(error => {
+        this.setState({ loading: false });
+      });
   };
 
   inputChangedHandler = (event, inputIdentifier) => {
@@ -108,11 +112,9 @@ class ContactData extends Component {
     }
 
     let form = (
-      <form>
+      <form onSubmit={this.orderHandler}>
         {formInputs}
-        <Button btnType='Success' clicked={this.orderHandler}>
-          ORDER
-        </Button>
+        <Button btnType='Success'>ORDER</Button>
       </form>
     );
     if (this.state.loading) {
