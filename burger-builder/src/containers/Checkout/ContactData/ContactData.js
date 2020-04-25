@@ -1,69 +1,69 @@
-import React, { Component } from "react";
-import Button from "../../../components/UI/Button/Button";
-import classes from "./ContactData.module.css";
+import React, { Component } from 'react';
+import Button from '../../../components/UI/Button/Button';
+import classes from './ContactData.module.css';
 
-import axios from "../../../axios-orders";
-import Spinner from "../../../components/UI/Spinner/Spinner";
-import Input from "../../../components/UI/Input/Input";
+// import axios from "../../../axios-orders";
+import Spinner from '../../../components/UI/Spinner/Spinner';
+import Input from '../../../components/UI/Input/Input';
 
 class ContactData extends Component {
   state = {
     orderForm: {
       name: {
-        elementType: "input",
+        elementType: 'input',
         elementConfig: {
-          type: "text",
-          placeholder: "Your Name",
+          type: 'text',
+          placeholder: 'Your Name',
         },
-        value: "",
+        value: '',
       },
       street: {
-        elementType: "input",
+        elementType: 'input',
         elementConfig: {
-          type: "text",
-          placeholder: "Street",
+          type: 'text',
+          placeholder: 'Street',
         },
-        value: "",
+        value: '',
       },
       zipCode: {
-        elementType: "input",
+        elementType: 'input',
         elementConfig: {
-          type: "text",
-          placeholder: "Postal Code",
+          type: 'text',
+          placeholder: 'Postal Code',
         },
-        value: "",
+        value: '',
       },
       country: {
-        elementType: "input",
+        elementType: 'input',
         elementConfig: {
-          type: "text",
-          placeholder: "Country",
+          type: 'text',
+          placeholder: 'Country',
         },
-        value: "",
+        value: '',
       },
       email: {
-        elementType: "input",
+        elementType: 'input',
         elementConfig: {
-          type: "email",
-          placeholder: "Your Mail",
+          type: 'email',
+          placeholder: 'Your Mail',
         },
-        value: "",
+        value: '',
       },
       deliveryMethod: {
-        elementType: "select",
+        elementType: 'select',
         elementConfig: {
           options: [
-            { value: "fastest", displayValue: "Fastest" },
-            { value: "cheapest", displayValue: "Cheapest" },
+            { value: 'fastest', displayValue: 'Fastest' },
+            { value: 'cheapest', displayValue: 'Cheapest' },
           ],
         },
-        value: "",
+        value: '',
       },
     },
     loading: false,
   };
 
-  orderHandler = (event) => {
+  orderHandler = event => {
     event.preventDefault();
     this.setState({ loading: true });
 
@@ -72,15 +72,25 @@ class ContactData extends Component {
       price: this.props.totalPrice,
     };
 
-    axios
-      .post("/orders.json", order)
-      .then((res) => {
-        this.setState({ loading: false });
-        this.props.history.push("/");
-      })
-      .catch((error) => {
-        this.setState({ loading: false });
-      });
+    console.log(order);
+
+    // axios
+    //   .post("/orders.json", order)
+    //   .then((res) => {
+    //     this.setState({ loading: false });
+    //     this.props.history.push("/");
+    //   })
+    //   .catch((error) => {
+    //     this.setState({ loading: false });
+    //   });
+  };
+
+  inputChangedHandler = (event, inputIdentifier) => {
+    const updatedOrderForm = { ...this.state.orderForm };
+    const updatedFormElement = { ...updatedOrderForm[inputIdentifier] };
+    updatedFormElement.value = event.target.value;
+    updatedOrderForm[inputIdentifier] = updatedFormElement;
+    this.setState({ orderForm: updatedOrderForm });
   };
 
   render() {
@@ -91,6 +101,7 @@ class ContactData extends Component {
           key={name}
           elementType={formInput.elementType}
           elementConfig={formInput.elementConfig}
+          changed={e => this.inputChangedHandler(e, name)}
           value={formInput.value}
         />
       );
@@ -99,7 +110,7 @@ class ContactData extends Component {
     let form = (
       <form>
         {formInputs}
-        <Button btnType="Success" clicked={this.orderHandler}>
+        <Button btnType='Success' clicked={this.orderHandler}>
           ORDER
         </Button>
       </form>
