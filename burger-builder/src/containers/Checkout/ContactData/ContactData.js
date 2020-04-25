@@ -151,6 +151,8 @@ class ContactData extends Component {
           elementConfig={formInput.elementConfig}
           changed={e => this.inputChangedHandler(e, name)}
           value={formInput.value}
+          invalid={!formInput.valid}
+          shouldValidate={formInput.validation}
         />
       );
     }
