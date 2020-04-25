@@ -33,7 +33,7 @@ class ContactData extends Component {
           required: true,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       zipCode: {
         elementType: 'input',
@@ -48,7 +48,7 @@ class ContactData extends Component {
           maxLength: 5,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       country: {
         elementType: 'input',
@@ -61,7 +61,7 @@ class ContactData extends Component {
           required: true,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       email: {
         elementType: 'input',
@@ -74,7 +74,7 @@ class ContactData extends Component {
           required: true,
         },
         valid: false,
-        touched: false
+        touched: false,
       },
       deliveryMethod: {
         elementType: 'select',
@@ -87,6 +87,7 @@ class ContactData extends Component {
         value: '',
       },
     },
+    // formIsValid: false,
     loading: false,
   };
 
@@ -143,8 +144,14 @@ class ContactData extends Component {
     );
     updatedFormElement.touched = true;
     updatedOrderForm[inputIdentifier] = updatedFormElement;
-    console.log(updatedFormElement);
-    this.setState({ orderForm: updatedOrderForm });
+
+    const formIsValid = Object.values(updatedOrderForm).reduce(
+      (acc, curr) => {
+        return acc && (!curr.validation || curr.valid);
+      },
+      true
+    );
+    this.setState({ orderForm: updatedOrderForm, formIsValid });
   };
 
   render() {
@@ -167,7 +174,9 @@ class ContactData extends Component {
     let form = (
       <form onSubmit={this.orderHandler}>
         {formInputs}
-        <Button btnType='Success'>ORDER</Button>
+        <Button btnType='Success' disabled={!this.state.formIsValid}>
+          ORDER
+        </Button>
       </form>
     );
     if (this.state.loading) {
