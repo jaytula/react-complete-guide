@@ -12,11 +12,8 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 import * as actionTypes from '../../store/actions';
 
-
-
 class BurgerBuilder extends Component {
   state = {
-    purchasable: false,
     purchasing: false,
     loading: false,
     error: null,
@@ -33,16 +30,16 @@ class BurgerBuilder extends Component {
     //   });
   }
 
-  // updatePurchaseState(ingredients) {
-  //   const sum = Object.keys(ingredients)
-  //     .map(igKey => {
-  //       return ingredients[igKey];
-  //     })
-  //     .reduce((sum, el) => sum + el, 0);
+  isPurchasable() {
+    const ingredients = this.props.ingredients;
+    const sum = Object.keys(ingredients)
+      .map(igKey => {
+        return ingredients[igKey];
+      })
+      .reduce((sum, el) => sum + el, 0);
 
-  //   this.setState({ purchasable: sum > 0 });
-  // }
-
+    return !!sum;
+  }
 
   purchaseHandler = () => {
     this.setState({ purchasing: true });
@@ -101,7 +98,7 @@ class BurgerBuilder extends Component {
             disabled={disabledInfo}
             ingredientAdded={this.props.onIngredientAdded}
             ingredientRemoved={this.props.onIngredientRemoved}
-            purchasable={this.state.purchasable}
+            purchasable={this.isPurchasable()}
             price={this.props.totalPrice}
             ordered={this.purchaseHandler}
           />
