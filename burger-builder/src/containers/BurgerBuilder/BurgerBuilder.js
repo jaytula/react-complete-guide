@@ -12,16 +12,10 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 import * as actionTypes from '../../store/actions';
 
-const INGREDIENT_PRICES = {
-  salad: 0.5,
-  cheese: 0.4,
-  meat: 1.3,
-  bacon: 0.7,
-};
+
 
 class BurgerBuilder extends Component {
   state = {
-    totalPrice: 4,
     purchasable: false,
     purchasing: false,
     loading: false,
@@ -39,46 +33,16 @@ class BurgerBuilder extends Component {
     //   });
   }
 
-  updatePurchaseState(ingredients) {
-    const sum = Object.keys(ingredients)
-      .map(igKey => {
-        return ingredients[igKey];
-      })
-      .reduce((sum, el) => sum + el, 0);
+  // updatePurchaseState(ingredients) {
+  //   const sum = Object.keys(ingredients)
+  //     .map(igKey => {
+  //       return ingredients[igKey];
+  //     })
+  //     .reduce((sum, el) => sum + el, 0);
 
-    this.setState({ purchasable: sum > 0 });
-  }
+  //   this.setState({ purchasable: sum > 0 });
+  // }
 
-  addIngredientHandler = type => {
-    const oldCount = this.state.ingredients[type];
-    const updatedCount = oldCount + 1;
-    const updatedIngredients = { ...this.state.ingredients };
-    updatedIngredients[type] = updatedCount;
-
-    const priceAddition = INGREDIENT_PRICES[type];
-    const updatedTotalPrice = this.state.totalPrice + priceAddition;
-    this.setState({
-      ingredients: updatedIngredients,
-      totalPrice: updatedTotalPrice,
-    });
-    this.updatePurchaseState(updatedIngredients);
-  };
-
-  removeIngredientHandler = type => {
-    const oldCount = this.state.ingredients[type];
-    if (oldCount <= 0) return;
-    const updatedCount = oldCount - 1;
-    const updatedIngredients = { ...this.state.ingredients };
-    updatedIngredients[type] = updatedCount;
-
-    const priceSubtraction = INGREDIENT_PRICES[type];
-    const updatedTotalPrice = this.state.totalPrice + priceSubtraction;
-    this.setState({
-      ingredients: updatedIngredients,
-      totalPrice: updatedTotalPrice,
-    });
-    this.updatePurchaseState(updatedIngredients);
-  };
 
   purchaseHandler = () => {
     this.setState({ purchasing: true });
@@ -95,7 +59,7 @@ class BurgerBuilder extends Component {
     Object.entries(this.state.ingredients).forEach(([key, value]) => {
       search.append(key, value);
     });
-    search.append('price', this.state.totalPrice);
+    search.append('price', this.props.totalPrice);
 
     this.props.history.push({
       pathname: '/checkout',
