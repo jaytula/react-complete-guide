@@ -26,10 +26,10 @@ const logger = store => {
   };
 };
 
-const myThunk = ({ dispatch }) => next => action => {
+const myThunk = ({ dispatch, getState }) => next => action => {
   if (typeof action !== 'function') return next(action);
   console.log('[myThunk]');
-  action(dispatch);
+  action(dispatch, getState);
 };
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
