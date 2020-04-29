@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, combineReducers, applyMiddleware, compose} from 'redux';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+// import thunk from 'redux-thunk';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
@@ -11,8 +12,8 @@ import resultReducer from './store/reducers/result';
 
 const rootReducer = combineReducers({
   counter: counterReducer,
-  results: resultReducer
-})
+  results: resultReducer,
+});
 
 const logger = store => {
   return next => {
@@ -25,13 +26,23 @@ const logger = store => {
   };
 };
 
+const myThunk = ({ dispatch }) => next => action => {
+  if (typeof action !== 'function') return next(action);
+  console.log('[myThunk]');
+  action(dispatch);
+};
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const store = createStore(rootReducer, composeEnhancers(applyMiddleware(logger)));
+const store = createStore(
+  rootReducer,
+  composeEnhancers(applyMiddleware(logger, myThunk))
+);
 
-ReactDOM.render(<Provider store={store}>
-  <App />
-</Provider>,
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
   document.getElementById('root')
 );
 registerServiceWorker();
