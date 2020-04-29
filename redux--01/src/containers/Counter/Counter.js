@@ -47,7 +47,7 @@ class Counter extends Component {
 
 const mapStateToProps = state => ({
   ctr: state.counter.count,
-  storedResults: state.results,
+  storedResults: state.results.results,
 });
 
 const mapDispatchToProps = dispatch => ({
