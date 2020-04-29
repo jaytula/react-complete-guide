@@ -4,7 +4,7 @@ export const saveResult = result => {
   // const updatedResult = result*2;
   return {
     type: actionTypes.STORE_RESULT,
-    result: result * 2,
+    result: result,
   };
 };
 
