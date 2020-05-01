@@ -44,15 +44,18 @@ const reducer = (state = initialState, action) => {
       );
       return {
         ...state,
-        ingredients: action.ingredients,
+        ingredients: ['salad', 'bacon', 'cheese', 'meat'].reduce(
+          (acc, name) => ({ ...acc, [name]: action.ingredients[name] }),
+          {}
+        ),
         totalPrice,
-        error: false
+        error: false,
       };
     case actionTypes.FETCH_INGREDIENTS_FAILED:
       return {
         ...state,
-        error: true
-      }
+        error: true,
+      };
     default:
       return state;
   }
