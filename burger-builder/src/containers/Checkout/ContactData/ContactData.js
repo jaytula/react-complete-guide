@@ -94,7 +94,6 @@ class ContactData extends Component {
       },
     },
     // formIsValid: false,
-    loading: false,
   };
 
   orderHandler = event => {
@@ -111,7 +110,7 @@ class ContactData extends Component {
       orderData: formData,
     };
 
-    this.props.onOrderBurger(order)
+    this.props.onOrderBurger(order);
     // axios
     //   .post('/orders.json', order)
     //   .then(res => {
@@ -151,12 +150,9 @@ class ContactData extends Component {
     updatedFormElement.touched = true;
     updatedOrderForm[inputIdentifier] = updatedFormElement;
 
-    const formIsValid = Object.values(updatedOrderForm).reduce(
-      (acc, curr) => {
-        return acc && curr.valid;
-      },
-      true
-    );
+    const formIsValid = Object.values(updatedOrderForm).reduce((acc, curr) => {
+      return acc && curr.valid;
+    }, true);
     this.setState({ orderForm: updatedOrderForm, formIsValid });
   };
 
@@ -185,7 +181,7 @@ class ContactData extends Component {
         </Button>
       </form>
     );
-    if (this.state.loading) {
+    if (this.props.loading) {
       form = <Spinner />;
     }
     return (
@@ -200,10 +196,13 @@ class ContactData extends Component {
 const mapStateToProps = state => ({
   ingredients: state.ingredients,
   totalPrice: state.totalPrice,
-})
+  loading: state.loading,
+});
 
 const mapDispatchToProps = dispatch => ({
-  onOrderBurger: (orderData) => dispatch(actions.purchaseBurgerStart(orderData))
-
-})
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(ContactData, axios));
+  onOrderBurger: orderData => dispatch(actions.purchaseBurger(orderData)),
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(ContactData, axios));
