@@ -11,13 +11,11 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 // import * as actionTypes from '../../store/actions/actionTypes';
-import * as actions from '../../store/actions/index';
+import * as burgerBuilderActions from '../../store/actions/index';
 
 class BurgerBuilder extends Component {
   state = {
     purchasing: false,
-    loading: false,
-    error: null,
   };
 
   componentDidMount() {
@@ -29,6 +27,7 @@ class BurgerBuilder extends Component {
     //   .catch(error => {
     //     this.setState({ error: true });
     //   });
+    this.props.onInitIngredients()
   }
 
   isPurchasable() {
@@ -66,7 +65,7 @@ class BurgerBuilder extends Component {
     }
 
     let orderSummary = null;
-    let burger = this.state.error ? (
+    let burger = this.props.error ? (
       <p>Ingredients can't be loaded!</p>
     ) : (
       <Spinner />
@@ -98,10 +97,6 @@ class BurgerBuilder extends Component {
       );
     }
 
-    if (this.state.loading) {
-      orderSummary = <Spinner />;
-    }
-
     return (
       <Aux>
         <Modal
@@ -119,13 +114,17 @@ class BurgerBuilder extends Component {
 const mapStateToProps = state => ({
   ingredients: state.ingredients,
   totalPrice: state.totalPrice,
+  error: state.error
 });
 
 const mapDispatchToProps = dispatch => ({
   onIngredientAdded: ingredientName =>
-    dispatch(actions.addIngredient(ingredientName)),
+    dispatch(burgerBuilderActions.addIngredient(ingredientName)),
   onIngredientRemoved: ingredientName =>
-    dispatch(actions.removeIngredient(ingredientName)),
+    dispatch(burgerBuilderActions.removeIngredient(ingredientName)),
+  onInitIngredients: () => {
+    dispatch(burgerBuilderActions.initIngredients());
+  },
 });
 
 export default withErrorHandler(
