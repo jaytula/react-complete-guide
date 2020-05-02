@@ -90,7 +90,7 @@ class ContactData extends Component {
         },
         validation: {},
         valid: true,
-        value: '',
+        value: 'fastest',
       },
     },
     // formIsValid: false,
@@ -193,10 +193,10 @@ class ContactData extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ingredients: state.ingredients,
-  totalPrice: state.totalPrice,
-  loading: state.loading,
+const mapStateToProps = ({burgerBuilder, order}) => ({
+  ingredients: burgerBuilder.ingredients,
+  totalPrice: burgerBuilder.totalPrice,
+  loading: order.loading,
 });
 
 const mapDispatchToProps = dispatch => ({

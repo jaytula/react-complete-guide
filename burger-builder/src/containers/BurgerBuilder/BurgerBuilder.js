@@ -111,10 +111,10 @@ class BurgerBuilder extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ingredients: state.ingredients,
-  totalPrice: state.totalPrice,
-  error: state.error
+const mapStateToProps = ({burgerBuilder}) => ({
+  ingredients: burgerBuilder.ingredients,
+  totalPrice: burgerBuilder.totalPrice,
+  error: burgerBuilder.error
 });
 
 const mapDispatchToProps = dispatch => ({

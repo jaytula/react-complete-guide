@@ -33,9 +33,9 @@ class Checkout extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ingredients: state.ingredients,
-  totalPrice: state.totalPrice,
+const mapStateToProps = ({burgerBuilder}) => ({
+  ingredients: burgerBuilder.ingredients,
+  totalPrice: burgerBuilder.totalPrice,
 });
 
 export default connect(mapStateToProps)(Checkout);
