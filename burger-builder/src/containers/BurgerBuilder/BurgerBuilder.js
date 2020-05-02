@@ -11,7 +11,7 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 
 // import * as actionTypes from '../../store/actions/actionTypes';
-import * as burgerBuilderActions from '../../store/actions/index';
+import * as actions from '../../store/actions/index';
 
 class BurgerBuilder extends Component {
   state = {
@@ -27,7 +27,7 @@ class BurgerBuilder extends Component {
     //   .catch(error => {
     //     this.setState({ error: true });
     //   });
-    this.props.onInitIngredients()
+    this.props.onInitIngredients();
   }
 
   isPurchasable() {
@@ -50,6 +50,7 @@ class BurgerBuilder extends Component {
   };
 
   purchaseContinueHandler = () => {
+    this.props.onInitPurchase();
     this.props.history.push({
       pathname: '/checkout',
     });
@@ -111,19 +112,22 @@ class BurgerBuilder extends Component {
   }
 }
 
-const mapStateToProps = ({burgerBuilder}) => ({
+const mapStateToProps = ({ burgerBuilder }) => ({
   ingredients: burgerBuilder.ingredients,
   totalPrice: burgerBuilder.totalPrice,
-  error: burgerBuilder.error
+  error: burgerBuilder.error,
 });
 
 const mapDispatchToProps = dispatch => ({
   onIngredientAdded: ingredientName =>
-    dispatch(burgerBuilderActions.addIngredient(ingredientName)),
+    dispatch(actions.addIngredient(ingredientName)),
   onIngredientRemoved: ingredientName =>
-    dispatch(burgerBuilderActions.removeIngredient(ingredientName)),
+    dispatch(actions.removeIngredient(ingredientName)),
   onInitIngredients: () => {
-    dispatch(burgerBuilderActions.initIngredients());
+    dispatch(actions.initIngredients());
+  },
+  onInitPurchase: () => {
+    dispatch(actions.purchaseInit());
   },
 });
 
