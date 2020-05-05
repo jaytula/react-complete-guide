@@ -13,10 +13,11 @@ const authStart = () => {
   };
 };
 
-const authSuccess = authData => {
+const authSuccess = (token, userId) => {
   return {
     type: actionTypes.AUTH_SUCCESS,
-    authData,
+    idToken: token,
+    userId: userId,
   };
 };
 
@@ -41,7 +42,7 @@ export const auth = (email, password, isSignup) => {
     Axios.post(AUTH_ENDPOINT, authData, { params: { key: API_KEY } })
       .then(response => {
         console.log(response);
-        dispatch(authSuccess(response.data));
+        dispatch(authSuccess(response.data.idToken, response.data.localId));
       })
       .catch(err => {
         console.log(err);

@@ -107,7 +107,7 @@ class Auth extends Component {
     let form = (
       <form onSubmit={this.submitHandler}>
         {formInputs}
-        <Button btnType='Success'>SUBMIT</Button>
+        <Button btnType='Success'>{this.state.isSignup ? 'SIGNUP' : 'SIGNIN'}</Button>
       </form>
     );
     return (
