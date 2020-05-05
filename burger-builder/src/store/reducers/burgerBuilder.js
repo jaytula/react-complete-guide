@@ -14,45 +14,59 @@ const initialState = {
   error: false,
 };
 
+const addIngredient = (state, action) => {
+  return updateObject(state, {
+    ingredients: {
+      ...state.ingredients,
+      [action.ingredientName]: state.ingredients[action.ingredientName] + 1,
+    },
+    totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName],
+  });
+};
+
+const removeIngredient = (state, action) => {
+  return updateObject(state, {
+    ingredients: {
+      ...state.ingredients,
+      [action.ingredientName]: state.ingredients[action.ingredientName] - 1,
+    },
+    totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName],
+  });
+};
+
+const setIngredients = (state, action) => {
+  const totalPrice = Object.keys(action.ingredients).reduce(
+    (acc, ingredientName) =>
+      acc +
+      INGREDIENT_PRICES[ingredientName] * action.ingredients[ingredientName],
+    4
+  );
+  return updateObject(state, {
+    ingredients: ['salad', 'bacon', 'cheese', 'meat'].reduce(
+      (acc, name) => ({ ...acc, [name]: action.ingredients[name] }),
+      {}
+    ),
+    totalPrice,
+    error: false,
+  });
+};
+
+const fetchIngredientsFailed = (state, action) => {
+  return updateObject(state, {
+    error: true,
+  });
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.ADD_INGREDIENT:
-      return updateObject(state, {
-        ingredients: {
-          ...state.ingredients,
-          [action.ingredientName]: state.ingredients[action.ingredientName] + 1,
-        },
-        totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName],
-      });
-
+      return addIngredient(state, action);
     case actionTypes.REMOVE_INGREDIENT:
-      return updateObject(state, {
-        ingredients: {
-          ...state.ingredients,
-          [action.ingredientName]: state.ingredients[action.ingredientName] - 1,
-        },
-        totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName],
-      });
+      return removeIngredient(state, action);
     case actionTypes.SET_INGREDIENTS:
-      const totalPrice = Object.keys(action.ingredients).reduce(
-        (acc, ingredientName) =>
-          acc +
-          INGREDIENT_PRICES[ingredientName] *
-            action.ingredients[ingredientName],
-        4
-      );
-      return updateObject(state, {
-        ingredients: ['salad', 'bacon', 'cheese', 'meat'].reduce(
-          (acc, name) => ({ ...acc, [name]: action.ingredients[name] }),
-          {}
-        ),
-        totalPrice,
-        error: false,
-      });
+      return setIngredients(state, action);
     case actionTypes.FETCH_INGREDIENTS_FAILED:
-      return updateObject(state, {
-        error: true,
-      });
+      return fetchIngredientsFailed(state, action);
     default:
       return state;
   }
