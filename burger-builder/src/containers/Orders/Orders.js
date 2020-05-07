@@ -5,7 +5,8 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import { connect } from 'react-redux';
 
 import * as actions from '../../store/actions/index';
-import Spinner from '../../components/UI/Spinner/Spinner'
+import Spinner from '../../components/UI/Spinner/Spinner';
+import { Redirect } from 'react-router-dom';
 
 class Orders extends Component {
   componentDidMount() {
@@ -20,10 +21,13 @@ class Orders extends Component {
     // }).catch(err => {
     //   this.setState({loading: false});
     // })
-    this.props.onFetchOrders(this.props.token);
+    if (this.props.token) {
+      this.props.onFetchOrders(this.props.token);
+    }
   }
   render() {
-    if(this.props.loading) return <Spinner />
+    if(!this.props.token) return <Redirect to="/auth" />
+    if (this.props.loading) return <Spinner />;
 
     return (
       <div>
@@ -42,11 +46,11 @@ class Orders extends Component {
 const mapStateToProps = state => ({
   loading: state.order.loading,
   orders: state.order.orders,
-  token: state.auth.token
+  token: state.auth.token,
 });
 
 const mapDispatchToProps = dispatch => ({
-  onFetchOrders: (token) => dispatch(actions.fetchOrders(token)),
+  onFetchOrders: token => dispatch(actions.fetchOrders(token)),
 });
 
 export default withErrorHandler(

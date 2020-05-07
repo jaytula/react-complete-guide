@@ -7,6 +7,7 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import classes from './Auth.module.css';
 
 import * as actions from '../../store/actions/index';
+import { Redirect } from 'react-router-dom';
 
 class Auth extends Component {
   state = {
@@ -90,6 +91,7 @@ class Auth extends Component {
   };
 
   render() {
+    if (this.props.isAuth) return <Redirect to='/' />;
     if (this.props.loading) return <Spinner />;
     const formInputs = [];
     for (let [name, formInput] of Object.entries(this.state.controls)) {
@@ -135,6 +137,7 @@ class Auth extends Component {
 const mapStateToProps = state => ({
   loading: state.auth.loading,
   error: state.auth.error,
+  isAuth: !!state.auth.token,
 });
 
 const mapDispatchToProps = dispatch => ({

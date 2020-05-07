@@ -42,6 +42,7 @@ class BurgerBuilder extends Component {
   }
 
   purchaseHandler = () => {
+    if(!this.props.isAuth) this.props.history.push("/auth");
     this.setState({ purchasing: true });
   };
 
@@ -93,6 +94,7 @@ class BurgerBuilder extends Component {
             purchasable={this.isPurchasable()}
             price={this.props.totalPrice}
             ordered={this.purchaseHandler}
+            isAuth={this.props.isAuth}
           />
         </Aux>
       );
@@ -112,10 +114,11 @@ class BurgerBuilder extends Component {
   }
 }
 
-const mapStateToProps = ({ burgerBuilder }) => ({
+const mapStateToProps = ({ burgerBuilder, auth }) => ({
   ingredients: burgerBuilder.ingredients,
   totalPrice: burgerBuilder.totalPrice,
   error: burgerBuilder.error,
+  isAuth: !!auth.token
 });
 
 const mapDispatchToProps = dispatch => ({
