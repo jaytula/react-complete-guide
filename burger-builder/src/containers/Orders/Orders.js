@@ -20,7 +20,7 @@ class Orders extends Component {
     // }).catch(err => {
     //   this.setState({loading: false});
     // })
-    this.props.onFetchOrders();
+    this.props.onFetchOrders(this.props.token);
   }
   render() {
     if(this.props.loading) return <Spinner />
@@ -42,10 +42,11 @@ class Orders extends Component {
 const mapStateToProps = state => ({
   loading: state.order.loading,
   orders: state.order.orders,
+  token: state.auth.token
 });
 
 const mapDispatchToProps = dispatch => ({
-  onFetchOrders: () => dispatch(actions.fetchOrders()),
+  onFetchOrders: (token) => dispatch(actions.fetchOrders(token)),
 });
 
 export default withErrorHandler(
