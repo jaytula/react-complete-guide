@@ -29,18 +29,22 @@ const authFail = error => {
 };
 
 export const logout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('expirationDate');
+  localStorage.removeItem('userId');
+
   return {
-    type: actionTypes.AUTH_LOGOUT
-  }
-}
+    type: actionTypes.AUTH_LOGOUT,
+  };
+};
 
 export const checkAuthTimeout = expirationTime => {
   return dispatch => {
     setTimeout(() => {
       dispatch(logout());
-    }, expirationTime * 1000)
-  }
-}
+    }, expirationTime * 1000);
+  };
+};
 
 export const auth = (email, password, isSignup) => {
   return dispatch => {
@@ -56,19 +60,40 @@ export const auth = (email, password, isSignup) => {
     Axios.post(AUTH_ENDPOINT, authData, { params: { key: API_KEY } })
       .then(response => {
         console.log(response);
+        const expirationDate = new Date(
+          Date.now() + response.data.expiresIn * 1000
+        );
+        localStorage.setItem('token', response.data.idToken);
+        localStorage.setItem('expirationDate', expirationDate);
+        localStorage.setItem('userId', response.data.localId);
         dispatch(authSuccess(response.data.idToken, response.data.localId));
-        dispatch(checkAuthTimeout(response.data.expiresIn))
+        dispatch(checkAuthTimeout(response.data.expiresIn));
       })
       .catch(err => {
-        console.log({err});
+        console.log({ err });
         dispatch(authFail(err.response.data.error));
       });
   };
 };
 
-export const setAuthRedirect = (redirectPath) => {
+export const setAuthRedirect = redirectPath => {
   return {
     type: actionTypes.SET_AUTH_REDIRECT,
-    redirectPath
-  }
-}
+    redirectPath,
+  };
+};
+
+export const authCheckState = () => {
+  return dispatch => {
+    const token = localStorage.getItem('token');
+    if (!token) return dispatch(logout());
+    const expirationDate = localStorage.getItem('expirationDate');
+    if (!expirationDate || new Date(expirationDate) < new Date())
+      return dispatch(logout());
+    const userId = localStorage.getItem('userId');
+    dispatch(authSuccess(token, userId));
+    dispatch(
+      checkAuthTimeout(new Date(expirationDate).getSeconds() - new Date().getSeconds())
+    );
+  };
+};
