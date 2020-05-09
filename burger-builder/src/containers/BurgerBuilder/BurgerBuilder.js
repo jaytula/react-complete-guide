@@ -42,7 +42,10 @@ class BurgerBuilder extends Component {
   }
 
   purchaseHandler = () => {
-    if(!this.props.isAuth) this.props.history.push("/auth");
+    if (!this.props.isAuth) {
+      this.props.onSetAuthRedirect('/checkout');
+      this.props.history.push('/auth');
+    }
     this.setState({ purchasing: true });
   };
 
@@ -118,7 +121,8 @@ const mapStateToProps = ({ burgerBuilder, auth }) => ({
   ingredients: burgerBuilder.ingredients,
   totalPrice: burgerBuilder.totalPrice,
   error: burgerBuilder.error,
-  isAuth: !!auth.token
+  isAuth: !!auth.token,
+  building: burgerBuilder.building,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -132,6 +136,7 @@ const mapDispatchToProps = dispatch => ({
   onInitPurchase: () => {
     dispatch(actions.purchaseInit());
   },
+  onSetAuthRedirect: (redirectPath) => dispatch(actions.setAuthRedirect(redirectPath))
 });
 
 export default withErrorHandler(
