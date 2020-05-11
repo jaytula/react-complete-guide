@@ -8,7 +8,6 @@ import Auth from './containers/Auth/Auth';
 import Logout from './containers/Auth/Logout/Logout';
 import * as actions from './store/actions/index';
 import { connect } from 'react-redux';
-import Aux from './hoc/Aux/Aux';
 
 class App extends React.Component {
   // state = {
