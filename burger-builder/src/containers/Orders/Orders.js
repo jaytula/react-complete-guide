@@ -22,11 +22,11 @@ class Orders extends Component {
     //   this.setState({loading: false});
     // })
     if (this.props.token) {
-      this.props.onFetchOrders(this.props.token);
+      this.props.onFetchOrders(this.props.token, this.props.userId);
     }
   }
   render() {
-    if(!this.props.token) return <Redirect to="/auth" />
+    if (!this.props.token) return <Redirect to='/auth' />;
     if (this.props.loading) return <Spinner />;
 
     return (
@@ -47,10 +47,12 @@ const mapStateToProps = state => ({
   loading: state.order.loading,
   orders: state.order.orders,
   token: state.auth.token,
+  userId: state.auth.userId,
 });
 
 const mapDispatchToProps = dispatch => ({
-  onFetchOrders: token => dispatch(actions.fetchOrders(token)),
+  onFetchOrders: (token, userId) =>
+    dispatch(actions.fetchOrders(token, userId)),
 });
 
 export default withErrorHandler(
