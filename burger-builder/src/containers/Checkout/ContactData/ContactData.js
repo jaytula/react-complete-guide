@@ -9,6 +9,7 @@ import axios from '../../../axios-orders';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions/index';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
+import { updateObject } from '../../../shared/utility';
 
 class ContactData extends Component {
   state = {
@@ -109,7 +110,7 @@ class ContactData extends Component {
       ingredients: this.props.ingredients,
       price: this.props.totalPrice,
       orderData: formData,
-      userId: this.props.userId
+      userId: this.props.userId,
     };
 
     this.props.onOrderBurger(order, this.props.token);
@@ -142,14 +143,22 @@ class ContactData extends Component {
   }
 
   inputChangedHandler = (event, inputIdentifier) => {
-    const updatedOrderForm = { ...this.state.orderForm };
-    const updatedFormElement = { ...updatedOrderForm[inputIdentifier] };
-    updatedFormElement.value = event.target.value;
-    updatedFormElement.valid = this.checkValidity(
-      updatedFormElement.value,
-      updatedFormElement.validation
+    const updatedFormElement = updateObject(
+      this.state.orderForm[inputIdentifier],
+      {
+        value: event.target.value,
+        valid: this.checkValidity(
+          event.target.value,
+          this.state.orderForm[inputIdentifier].validation
+        ),
+        touched: true,
+      }
     );
-    updatedFormElement.touched = true;
+
+    const updatedOrderForm = updateObject(this.state.orderForm, {
+      [inputIdentifier]: updatedFormElement,
+    });
+
     updatedOrderForm[inputIdentifier] = updatedFormElement;
 
     const formIsValid = Object.values(updatedOrderForm).reduce((acc, curr) => {

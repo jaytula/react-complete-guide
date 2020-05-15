@@ -8,6 +8,7 @@ import classes from './Auth.module.css';
 
 import * as actions from '../../store/actions/index';
 import { Redirect } from 'react-router-dom';
+import { updateObject } from '../../shared/utility';
 
 class Auth extends Component {
   state = {
@@ -45,8 +46,8 @@ class Auth extends Component {
   };
 
   componentDidMount() {
-    if(!this.props.building && this.props.redirectPath !== '/') {
-    //  this.props.onSetAuthRedirect();
+    if (!this.props.building && this.props.redirectPath !== '/') {
+      //  this.props.onSetAuthRedirect();
     }
   }
 
@@ -68,16 +69,17 @@ class Auth extends Component {
   }
 
   inputChangedHandler = (event, controlName) => {
-    const updatedControls = { ...this.state.controls };
-    updatedControls[controlName] = {
-      ...this.state.controls[controlName],
-      value: event.target.value,
-      valid: this.checkValidity(
-        event.target.value,
-        this.state.controls[controlName].validation
-      ),
-      touched: true,
-    };
+    const updatedControls = updateObject(this.state.controls, {
+      [controlName]: updateObject(this.state.controls[controlName], {
+        value: event.target.value,
+        valid: this.checkValidity(
+          event.target.value,
+          this.state.controls[controlName].validation
+        ),
+        touched: true,
+      }),
+    });
+
     this.setState({ controls: updatedControls });
   };
 
@@ -145,13 +147,13 @@ const mapStateToProps = state => ({
   error: state.auth.error,
   isAuth: !!state.auth.token,
   redirectPath: state.auth.redirectPath,
-  building: state.burgerBuilder.building
+  building: state.burgerBuilder.building,
 });
 
 const mapDispatchToProps = dispatch => ({
   onAuth: (email, password, isSignup) =>
     dispatch(actions.auth(email, password, isSignup)),
-  onSetAuthRedirect: () => dispatch(actions.setAuthRedirect('/'))
+  onSetAuthRedirect: () => dispatch(actions.setAuthRedirect('/')),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);
