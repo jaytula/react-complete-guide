@@ -6,7 +6,6 @@ import classes from './CheckoutSummary.module.css';
 import { withRouter } from 'react-router-dom';
 
 const CheckoutSummary = props => {
-  console.log({CheckoutSummary: props});
   return (
     <div className={classes.CheckoutSummary}>
       <h1>We home it tastes well!</h1>

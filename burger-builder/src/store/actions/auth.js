@@ -59,7 +59,6 @@ export const auth = (email, password, isSignup) => {
 
     Axios.post(AUTH_ENDPOINT, authData, { params: { key: API_KEY } })
       .then(response => {
-        console.log(response);
         const expirationDate = new Date(
           Date.now() + response.data.expiresIn * 1000
         );
@@ -70,7 +69,6 @@ export const auth = (email, password, isSignup) => {
         dispatch(checkAuthTimeout(response.data.expiresIn));
       })
       .catch(err => {
-        console.log({ err });
         dispatch(authFail(err.response.data.error));
       });
   };

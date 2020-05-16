@@ -10,17 +10,7 @@ import { Redirect } from 'react-router-dom';
 
 class Orders extends Component {
   componentDidMount() {
-    // axios.get('/orders.json').then(res => {
-    //   this.setState({loading: false});
-    //   const { data } = res;
-    //   const orders = Object.keys(data).map(key => {
-    //     return { id: key, ...data[key] };
-    //   });
-    //   this.setState({ orders });
-    //   console.log(orders);
-    // }).catch(err => {
-    //   this.setState({loading: false});
-    // })
+
     if (this.props.token) {
       this.props.onFetchOrders(this.props.token, this.props.userId);
     }
