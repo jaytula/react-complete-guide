@@ -9,7 +9,7 @@ import axios from '../../../axios-orders';
 import { connect } from 'react-redux';
 import * as actions from '../../../store/actions/index';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
-import { updateObject } from '../../../shared/utility';
+import { updateObject, checkValidity } from '../../../shared/utility';
 
 class ContactData extends Component {
   state = {
@@ -125,29 +125,14 @@ class ContactData extends Component {
     //   });
   };
 
-  checkValidity(value, rules) {
-    let isValid = true;
-    if (rules.required) {
-      isValid = value.trim() !== '';
-    }
 
-    if (isValid && rules.minLength) {
-      isValid = value.length >= rules.minLength;
-    }
-
-    if (isValid && rules.maxLength) {
-      isValid = value.length <= rules.minLength;
-    }
-
-    return isValid;
-  }
 
   inputChangedHandler = (event, inputIdentifier) => {
     const updatedFormElement = updateObject(
       this.state.orderForm[inputIdentifier],
       {
         value: event.target.value,
-        valid: this.checkValidity(
+        valid: checkValidity(
           event.target.value,
           this.state.orderForm[inputIdentifier].validation
         ),

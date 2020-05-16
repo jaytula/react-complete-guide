@@ -8,7 +8,7 @@ import classes from './Auth.module.css';
 
 import * as actions from '../../store/actions/index';
 import { Redirect } from 'react-router-dom';
-import { updateObject } from '../../shared/utility';
+import { updateObject, checkValidity } from '../../shared/utility';
 
 class Auth extends Component {
   state = {
@@ -51,28 +51,11 @@ class Auth extends Component {
     }
   }
 
-  checkValidity(value, rules) {
-    let isValid = true;
-    if (rules.required) {
-      isValid = value.trim() !== '';
-    }
-
-    if (isValid && rules.minLength) {
-      isValid = value.length >= rules.minLength;
-    }
-
-    if (isValid && rules.maxLength) {
-      isValid = value.length <= rules.minLength;
-    }
-
-    return isValid;
-  }
-
   inputChangedHandler = (event, controlName) => {
     const updatedControls = updateObject(this.state.controls, {
       [controlName]: updateObject(this.state.controls[controlName], {
         value: event.target.value,
-        valid: this.checkValidity(
+        valid: checkValidity(
           event.target.value,
           this.state.controls[controlName].validation
         ),
