@@ -31,9 +31,11 @@
   "dependencies": {
     "-": "0.0.1",
     "D": "^1.0.0",
+    "core-js": "^3.6.5",
     "html-webpack-plugin": "^4.3.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "regenerator-runtime": "^0.13.5"
   }
 }
