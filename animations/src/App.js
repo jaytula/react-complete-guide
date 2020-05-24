@@ -35,7 +35,7 @@ class App extends Component {
         <Transition
           mountOnEnter
           unmountOnExit
-          in={this.state.showBlock}[]
+          in={this.state.showBlock}
           timeout={1000}
           onEnter={() => console.log('onEnter')}
           onEntering={() => console.log('onEntering')}
