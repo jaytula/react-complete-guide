@@ -42,7 +42,7 @@ export const checkAuthTimeout = expirationTime => {
   return dispatch => {
     setTimeout(() => {
       dispatch(logout());
-    }, expirationTime*1000);
+    }, expirationTime * 1000);
   };
 };
 
@@ -84,16 +84,15 @@ export const setAuthRedirect = redirectPath => {
 export const authCheckState = () => {
   return dispatch => {
     const token = localStorage.getItem('token');
-    if (!token) return dispatch(logout());
-    const expirationDate = localStorage.getItem('expirationDate');
-    if (!expirationDate || new Date(expirationDate) < new Date()) 
+    if (!token) {
       return dispatch(logout());
+    }
+    const expirationDate = localStorage.getItem('expirationDate');
+    if (!expirationDate || new Date(expirationDate) < new Date()) {
+      return dispatch(logout());
+    }
     const userId = localStorage.getItem('userId');
     dispatch(authSuccess(token, userId));
-    dispatch(
-      checkAuthTimeout(
-        (new Date(expirationDate) - new Date())/1000
-      )
-    );
+    dispatch(checkAuthTimeout((new Date(expirationDate) - new Date()) / 1000));
   };
 };
