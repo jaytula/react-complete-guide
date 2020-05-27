@@ -4,9 +4,9 @@ import * as actions from "../actions/index";
 
 const API_KEY = process.env.REACT_APP_FIREBASE_API_KEY;
 const SIGNUP_ENDPOINT =
-  'https://identitytoolkit.googleapis.com/v1/accounts:signUp';
+  "https://identitytoolkit.googleapis.com/v1/accounts:signUp";
 const SIGNIN_ENDPOINT =
-  'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword';
+  "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword";
 
 export function* logoutSaga(action) {
   yield localStorage.removeItem("token");
@@ -47,4 +47,22 @@ export function* authUserSaga(action) {
   } catch (err) {
     yield put(actions.authFail(err.response.data.error));
   }
+}
+
+export function* authCheckStateSaga(action) {
+  const token = yield localStorage.getItem("token");
+  if (!token) {
+    yield put(actions.logout());
+    return;
+  }
+  const expirationDate = yield localStorage.getItem("expirationDate");
+  if (!expirationDate || new Date(expirationDate) < new Date()) {
+    yield put(actions.logout());
+    return;
+  }
+  const userId = localStorage.getItem("userId");
+  yield put(actions.authSuccess(token, userId));
+  yield put(
+    actions.checkAuthTimeout((new Date(expirationDate) - new Date()) / 1000)
+  );
 }
