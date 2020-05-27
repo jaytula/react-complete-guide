@@ -1,19 +1,12 @@
 import * as actionTypes from './actionTypes';
-import Axios from 'axios';
 
-const API_KEY = process.env.REACT_APP_FIREBASE_API_KEY;
-const SIGNUP_ENDPOINT =
-  'https://identitytoolkit.googleapis.com/v1/accounts:signUp';
-const SIGNIN_ENDPOINT =
-  'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword';
-
-const authStart = () => {
+export const authStart = () => {
   return {
     type: actionTypes.AUTH_START,
   };
 };
 
-const authSuccess = (token, userId) => {
+export const authSuccess = (token, userId) => {
   return {
     type: actionTypes.AUTH_SUCCESS,
     idToken: token,
@@ -21,7 +14,7 @@ const authSuccess = (token, userId) => {
   };
 };
 
-const authFail = error => {
+export const authFail = error => {
   return {
     type: actionTypes.AUTH_FAIL,
     error,
@@ -52,31 +45,12 @@ export const checkAuthTimeout = expirationTime => {
 };
 
 export const auth = (email, password, isSignup) => {
-  return dispatch => {
-    dispatch(authStart());
-    const authData = {
-      email,
-      password,
-      returnSecureToken: true,
-    };
-
-    const AUTH_ENDPOINT = isSignup ? SIGNUP_ENDPOINT : SIGNIN_ENDPOINT;
-
-    Axios.post(AUTH_ENDPOINT, authData, { params: { key: API_KEY } })
-      .then(response => {
-        const expirationDate = new Date(
-          Date.now() + response.data.expiresIn * 1000
-        );
-        localStorage.setItem('token', response.data.idToken);
-        localStorage.setItem('expirationDate', expirationDate);
-        localStorage.setItem('userId', response.data.localId);
-        dispatch(authSuccess(response.data.idToken, response.data.localId));
-        dispatch(checkAuthTimeout(response.data.expiresIn));
-      })
-      .catch(err => {
-        dispatch(authFail(err.response.data.error));
-      });
-  };
+  return {
+    type: actionTypes.AUTH_USER,
+    email,
+    password,
+    isSignup
+  }
 };
 
 export const setAuthRedirect = redirectPath => {
