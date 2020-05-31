@@ -24,6 +24,10 @@ const Ingredients = () => {
       });
   }, []);
 
+  useEffect(() => {
+    console.log('Rendering Ingredients', ingredients);
+  }, [ingredients])
+
   const addIngredientHandler = ingredient => {
     fetch(`${process.env.REACT_APP_BACKEND}/ingredients.json`, {
       method: 'POST',
