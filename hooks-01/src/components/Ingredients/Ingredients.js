@@ -31,7 +31,15 @@ const Ingredients = () => {
   const setIngredientsHandler = useCallback(ing => setIngredients(ing), []);
 
   const onRemoveItemHandler = id => {
-    setIngredients(prevState => prevState.filter(ing => ing.id !== id));
+    fetch(`${process.env.REACT_APP_BACKEND}/ingredients/${id}.json`, {
+      method: 'DELETE',
+    })
+      .then(response => {
+        setIngredients(prevState => prevState.filter(ing => ing.id !== id));
+      })
+      .catch(error => {
+        console.log(error);
+      })
   };
   return (
     <div className='App'>
