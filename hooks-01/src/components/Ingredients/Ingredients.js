@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import IngredientForm from './IngredientForm';
 import Search from './Search';
@@ -8,25 +8,8 @@ const Ingredients = () => {
   const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BACKEND}/ingredients.json`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(res => res.json())
-      .then(data => {
-        const ings = Object.entries(data).map(([id, value]) => ({
-          id,
-          ...value,
-        }));
-        setIngredients(ings);
-      });
-  }, []);
-
-  useEffect(() => {
     console.log('Rendering Ingredients', ingredients);
-  }, [ingredients])
+  }, [ingredients]);
 
   const addIngredientHandler = ingredient => {
     fetch(`${process.env.REACT_APP_BACKEND}/ingredients.json`, {
@@ -45,7 +28,7 @@ const Ingredients = () => {
       });
   };
 
-  const setIngredientsHandler = ing => setIngredients(ing);
+  const setIngredientsHandler = useCallback(ing => setIngredients(ing), []);
 
   const onRemoveItemHandler = id => {
     setIngredients(prevState => prevState.filter(ing => ing.id !== id));
