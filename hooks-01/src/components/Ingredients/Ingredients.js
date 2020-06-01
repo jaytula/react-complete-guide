@@ -45,6 +45,8 @@ const Ingredients = () => {
       });
   };
 
+  const setIngredientsHandler = ing => setIngredients(ing);
+
   const onRemoveItemHandler = id => {
     setIngredients(prevState => prevState.filter(ing => ing.id !== id));
   };
@@ -53,7 +55,7 @@ const Ingredients = () => {
       <IngredientForm onAddIngredient={addIngredientHandler} />
 
       <section>
-        <Search />
+        <Search setIngredients={setIngredientsHandler} />
         {/* Need to add list here! */}
         <IngredientList
           ingredients={ingredients}
