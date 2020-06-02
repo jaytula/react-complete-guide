@@ -22,6 +22,7 @@ const Search = React.memo(({ setIngredients }) => {
       })
         .then(res => res.json())
         .then(data => {
+          if(!data) return;
           const ings = Object.entries(data).map(([id, value]) => ({
             id,
             ...value,

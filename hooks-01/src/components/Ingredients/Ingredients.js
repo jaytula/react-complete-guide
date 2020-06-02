@@ -1,18 +1,32 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useReducer, useEffect, useCallback, useState } from 'react';
 
 import IngredientForm from './IngredientForm';
 import Search from './Search';
 import IngredientList from './IngredientList';
 import ErrorModal from '../UI/ErrorModal';
 
+const ingredientReducer = (currentIngredients, action) => {
+  switch (action.type) {
+    case 'SET':
+      return action.ingredients;
+    case 'ADD':
+      return [...currentIngredients, action.ingredient];
+    case 'DELETE':
+      return currentIngredients.filter(ing => ing.id !== action.id);
+    default:
+      return currentIngredients;
+  }
+};
+
 const Ingredients = () => {
-  const [ingredients, setIngredients] = useState([]);
+  const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
+  // const [ingredients, setIngredients] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
 
   useEffect(() => {
-    console.log('Rendering Ingredients', ingredients);
-  }, [ingredients]);
+    console.log('Rendering Ingredients', userIngredients);
+  }, [userIngredients]);
 
   const addIngredientHandler = ingredient => {
     setIsLoading(true);
@@ -25,10 +39,10 @@ const Ingredients = () => {
         return response.json();
       })
       .then(responseData => {
-        setIngredients(prevState => [
-          ...prevState,
-          { id: responseData.name, ...ingredient },
-        ]);
+        dispatch({
+          type: 'ADD',
+          ingredient: { id: responseData.name, ...ingredient },
+        });
         setIsLoading(false);
       })
       .catch(error => {
@@ -37,16 +51,16 @@ const Ingredients = () => {
       });
   };
 
-  const setIngredientsHandler = useCallback(ing => setIngredients(ing), []);
+  const setIngredientsHandler = useCallback(ing => dispatch({type: 'SET', ingredients: ing}), []);
 
   const onRemoveItemHandler = id => {
-    setIsLoading(true)
+    setIsLoading(true);
     fetch(`${process.env.REACT_APP_BACKEND}/ingredients/${id}.json`, {
       method: 'DELETE',
     })
       .then(response => {
-        setIngredients(prevState => prevState.filter(ing => ing.id !== id));
-        setIsLoading(false)
+        dispatch({type: 'DELETE', id});
+        setIsLoading(false);
       })
       .catch(error => {
         setError('Something went wrong');
@@ -70,7 +84,7 @@ const Ingredients = () => {
         {/* Need to add list here! */}
 
         <IngredientList
-          ingredients={ingredients}
+          ingredients={userIngredients}
           onRemoveItem={onRemoveItemHandler}
         />
       </section>
