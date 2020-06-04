@@ -4,6 +4,7 @@ import IngredientForm from './IngredientForm';
 import Search from './Search';
 import IngredientList from './IngredientList';
 import ErrorModal from '../UI/ErrorModal';
+import useHttp from '../../hooks/http';
 
 const ingredientReducer = (currentIngredients, action) => {
   switch (action.type) {
@@ -18,77 +19,47 @@ const ingredientReducer = (currentIngredients, action) => {
   }
 };
 
-const httpReducer = (httpState, action) => {
-  switch (action.type) {
-    case 'SEND':
-      return { loading: true, error: null };
-    case 'RESPONSE':
-      return { ...httpState, loading: false };
-    case 'ERROR':
-      return { loading: false, error: action.error };
-    case 'CLEAR':
-      return { ...httpState, error: null };
-    default:
-      throw new Error('Should not be reached!');
-  }
-};
-
 const Ingredients = () => {
   const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
-  const [httpState, dispatchHttp] = useReducer(httpReducer, {
-    loading: false,
-    error: null,
-  });
+  const { isLoading, data, error, sendRequest } = useHttp();
 
   useEffect(() => {
     console.log('Rendering Ingredients', userIngredients);
   }, [userIngredients]);
 
   const addIngredientHandler = useCallback(ingredient => {
-    dispatchHttp({ type: 'SEND' });
-    fetch(`${process.env.REACT_APP_BACKEND}/ingredients.json`, {
-      method: 'POST',
-      body: JSON.stringify(ingredient),
-      header: { 'Content-Type': 'application/json' },
-    })
-      .then(response => {
-        return response.json();
-      })
-      .then(responseData => {
-        dispatch({
-          type: 'ADD',
-          ingredient: { id: responseData.name, ...ingredient },
-        });
-        dispatchHttp({ type: 'RESPONSE' });
-      })
-      .catch(error => {
-        dispatchHttp({ type: 'ERROR', error: error.message });
-      });
+    // dispatchHttp({ type: 'SEND' });
+    // fetch(`${process.env.REACT_APP_BACKEND}/ingredients.json`, {
+    //   method: 'POST',
+    //   body: JSON.stringify(ingredient),
+    //   header: { 'Content-Type': 'application/json' },
+    // })
+    //   .then(response => {
+    //     return response.json();
+    //   })
+    //   .then(responseData => {
+    //     dispatch({
+    //       type: 'ADD',
+    //       ingredient: { id: responseData.name, ...ingredient },
+    //     });
+    //     dispatchHttp({ type: 'RESPONSE' });
+    //   })
+    //   .catch(error => {
+    //     dispatchHttp({ type: 'ERROR', error: error.message });
+    //   });
   }, []);
 
-  const setIngredientsHandler = useCallback(
-    ing => dispatch({ type: 'SET', ingredients: ing }),
-    []
-  );
+  const setIngredientsHandler = useCallback(ing => {
+    dispatch({ type: 'SET', ingredients: ing });
+  }, []);
 
   const onRemoveItemHandler = useCallback(id => {
-    dispatchHttp({ type: 'SEND' });
-    fetch(`${process.env.REACT_APP_BACKEND}/ingredients/${id}.json`, {
-      method: 'DELETE',
-    })
-      .then(response => {
-        dispatch({ type: 'DELETE', id });
-        dispatchHttp({ type: 'RESPONSE' });
-      })
-      .catch(error => {
-        dispatchHttp({ type: 'ERROR', error: error.message });
-      });
-  }, []);
+    sendRequest(`${process.env.REACT_APP_BACKEND}/ingredients/${id}.json`, 'DELETE')
+  }, [sendRequest]);
 
-  const clearError = useCallback(
-    () => dispatchHttp({ type: 'CLEAR', error: null }),
-    []
-  );
+  const clearError = useCallback(() => {
+    // dispatchHttp({ type: 'CLEAR', error: null });
+  }, []);
 
   const ingredientList = useMemo(() => {
     return (
@@ -101,12 +72,12 @@ const Ingredients = () => {
 
   return (
     <div className='App'>
-      {httpState.error && (
-        <ErrorModal onClose={clearError}>{httpState.error}</ErrorModal>
+      {error && (
+        <ErrorModal onClose={clearError}>{error}</ErrorModal>
       )}
       <IngredientForm
         onAddIngredient={addIngredientHandler}
-        loading={httpState.loading}
+        loading={isLoading}
       />
 
       <section>
