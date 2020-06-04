@@ -21,41 +21,78 @@ const ingredientReducer = (currentIngredients, action) => {
 
 const Ingredients = () => {
   const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
-  const { isLoading, data, error, sendRequest } = useHttp();
+  const { isLoading, data, error, sendRequest, extra, identifier } = useHttp();
 
   useEffect(() => {
     console.log('Rendering Ingredients', userIngredients);
   }, [userIngredients]);
 
-  const addIngredientHandler = useCallback(ingredient => {
-    // dispatchHttp({ type: 'SEND' });
-    // fetch(`${process.env.REACT_APP_BACKEND}/ingredients.json`, {
-    //   method: 'POST',
-    //   body: JSON.stringify(ingredient),
-    //   header: { 'Content-Type': 'application/json' },
-    // })
-    //   .then(response => {
-    //     return response.json();
-    //   })
-    //   .then(responseData => {
-    //     dispatch({
-    //       type: 'ADD',
-    //       ingredient: { id: responseData.name, ...ingredient },
-    //     });
-    //     dispatchHttp({ type: 'RESPONSE' });
-    //   })
-    //   .catch(error => {
-    //     dispatchHttp({ type: 'ERROR', error: error.message });
-    //   });
-  }, []);
+  useEffect(() => {
+    if (isLoading || error) return;
+    switch (identifier) {
+      case 'REMOVE_INGREDIENT':
+        dispatch({ type: 'DELETE', id: extra });
+        break;
+      case 'ADD_INGREDIENT':
+        console.log({ data });
+        dispatch({
+          type: 'ADD',
+          ingredient: { id: data.name, ...extra },
+        });
+        break;
+      default:
+        break;
+    }
+  }, [data, isLoading, extra, identifier, error]);
+
+  const addIngredientHandler = useCallback(
+    ingredient => {
+      sendRequest(
+        `${process.env.REACT_APP_BACKEND}/ingredients.json`,
+        'POST',
+        JSON.stringify(ingredient),
+        ingredient,
+        'ADD_INGREDIENT'
+      );
+      // dispatchHttp({ type: 'SEND' });
+      // fetch(`${process.env.REACT_APP_BACKEND}/ingredients.json`, {
+      //   method: 'POST',
+      //   body: JSON.stringify(ingredient),
+      //   header: { 'Content-Type': 'application/json' },
+      // })
+      //   .then(response => {
+      //     return response.json();
+      //   })
+      //   .then(responseData => {
+      //     dispatch({
+      //       type: 'ADD',
+      //       ingredient: { id: responseData.name, ...ingredient },
+      //     });
+      //     dispatchHttp({ type: 'RESPONSE' });
+      //   })
+      //   .catch(error => {
+      //     dispatchHttp({ type: 'ERROR', error: error.message });
+      //   });
+    },
+    [sendRequest]
+  );
 
   const setIngredientsHandler = useCallback(ing => {
     dispatch({ type: 'SET', ingredients: ing });
   }, []);
 
-  const onRemoveItemHandler = useCallback(id => {
-    sendRequest(`${process.env.REACT_APP_BACKEND}/ingredients/${id}.json`, 'DELETE')
-  }, [sendRequest]);
+  const onRemoveItemHandler = useCallback(
+    id => {
+      sendRequest(
+        `${process.env.REACT_APP_BACKEND}/ingredients/${id}.json`,
+        'DELETE',
+        null,
+        id,
+        'REMOVE_INGREDIENT'
+      );
+    },
+    [sendRequest]
+  );
 
   const clearError = useCallback(() => {
     // dispatchHttp({ type: 'CLEAR', error: null });
@@ -72,9 +109,7 @@ const Ingredients = () => {
 
   return (
     <div className='App'>
-      {error && (
-        <ErrorModal onClose={clearError}>{error}</ErrorModal>
-      )}
+      {error && <ErrorModal onClose={clearError}>{error}</ErrorModal>}
       <IngredientForm
         onAddIngredient={addIngredientHandler}
         loading={isLoading}

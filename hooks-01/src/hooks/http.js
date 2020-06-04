@@ -5,9 +5,20 @@ import { useReducer, useCallback } from 'react';
 const httpReducer = (httpState, action) => {
   switch (action.type) {
     case 'SEND':
-      return { loading: true, error: null, data: null };
+      return {
+        loading: true,
+        error: null,
+        data: null,
+        extra: null,
+        identifier: action.identifier,
+      };
     case 'RESPONSE':
-      return { ...httpState, loading: false, data: action.responseData };
+      return {
+        ...httpState,
+        loading: false,
+        data: action.responseData,
+        extra: action.extra,
+      };
     case 'ERROR':
       return { loading: false, error: action.error };
     case 'CLEAR':
@@ -22,10 +33,12 @@ const useHttp = () => {
     loading: false,
     error: null,
     data: null,
+    extra: null,
+    identifier: null,
   });
 
-  const sendRequest = useCallback((url, method, body) => {
-    dispatchHttp({ type: 'SEND' });
+  const sendRequest = useCallback((url, method, body, extra, identifier) => {
+    dispatchHttp({ type: 'SEND', identifier });
     fetch(url, {
       method,
       body,
@@ -35,7 +48,8 @@ const useHttp = () => {
     })
       .then(response => response.json())
       .then(responseData => {
-        dispatchHttp({ type: 'RESPONSE', responseData: responseData });
+        console.log({responseData});
+        dispatchHttp({ type: 'RESPONSE', responseData: responseData, extra });
         // dispatch({ type: 'DELETE', id });
       })
       .catch(error => {
@@ -43,7 +57,14 @@ const useHttp = () => {
       });
   }, []);
 
-  return { isLoading: httpState.loading, data: httpState.data, error: httpState.error, sendRequest }
+  return {
+    isLoading: httpState.loading,
+    data: httpState.data,
+    error: httpState.error,
+    sendRequest,
+    extra: httpState.extra,
+    identifier: httpState.identifier
+  };
 };
 
 export default useHttp;
