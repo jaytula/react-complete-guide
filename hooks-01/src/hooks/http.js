@@ -1,6 +1,13 @@
 import { useReducer, useCallback } from 'react';
 
 // `${process.env.REACT_APP_BACKEND}/ingredients/${id}.json`
+const initialState = {
+  loading: false,
+  error: null,
+  data: null,
+  extra: null,
+  identifier: null,
+};
 
 const httpReducer = (httpState, action) => {
   switch (action.type) {
@@ -22,20 +29,18 @@ const httpReducer = (httpState, action) => {
     case 'ERROR':
       return { loading: false, error: action.error };
     case 'CLEAR':
-      return { ...httpState, error: null };
+      return initialState;
     default:
       throw new Error('Should not be reached!');
   }
 };
 
 const useHttp = () => {
-  const [httpState, dispatchHttp] = useReducer(httpReducer, {
-    loading: false,
-    error: null,
-    data: null,
-    extra: null,
-    identifier: null,
-  });
+  const [httpState, dispatchHttp] = useReducer(httpReducer, initialState);
+
+  const clear = useCallback(() => {
+    dispatchHttp({ type: 'CLEAR' });
+  }, []);
 
   const sendRequest = useCallback((url, method, body, extra, identifier) => {
     dispatchHttp({ type: 'SEND', identifier });
@@ -48,7 +53,7 @@ const useHttp = () => {
     })
       .then(response => response.json())
       .then(responseData => {
-        console.log({responseData});
+        console.log({ responseData });
         dispatchHttp({ type: 'RESPONSE', responseData: responseData, extra });
         // dispatch({ type: 'DELETE', id });
       })
@@ -63,7 +68,8 @@ const useHttp = () => {
     error: httpState.error,
     sendRequest,
     extra: httpState.extra,
-    identifier: httpState.identifier
+    identifier: httpState.identifier,
+    clear
   };
 };
 
