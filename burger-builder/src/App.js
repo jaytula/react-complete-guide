@@ -25,7 +25,7 @@ const App = ({ onTryAutoSignup, isAuthenticated }) => {
     <Switch>
       <Route path='/auth' render={() => <Auth />} />
       <Route path='/' exact component={BurgerBuilder} />
-      <Redirect to='/' />
+      {/* <Redirect to='/' /> */}
     </Switch>
   );
   if (isAuthenticated) {
