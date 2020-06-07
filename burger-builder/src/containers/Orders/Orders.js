@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {  useEffect } from 'react';
 import Order from '../../components/Order/Order';
 import axios from '../../axios-orders';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
@@ -8,20 +8,20 @@ import * as actions from '../../store/actions/index';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import { Redirect } from 'react-router-dom';
 
-class Orders extends Component {
-  componentDidMount() {
-
-    if (this.props.token) {
-      this.props.onFetchOrders(this.props.token, this.props.userId);
+const Orders = ({token, loading, userId, orders, onFetchOrders}) => {
+  useEffect(() => {
+    if (token) {
+      onFetchOrders(token, userId);
     }
-  }
-  render() {
-    if (!this.props.token) return <Redirect to='/auth' />;
-    if (this.props.loading) return <Spinner />;
+  }, [token, userId, onFetchOrders])
+
+  
+    if (!token) return <Redirect to='/auth' />;
+    if (loading) return <Spinner />;
 
     return (
       <div>
-        {this.props.orders.map(order => (
+        {orders.map(order => (
           <Order
             key={order.id}
             ingredients={order.ingredients}
@@ -30,7 +30,7 @@ class Orders extends Component {
         ))}
       </div>
     );
-  }
+  
 }
 
 const mapStateToProps = state => ({
